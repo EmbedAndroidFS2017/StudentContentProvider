@@ -17,14 +17,15 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-public class StudentsProvider extends ContentProvider {
-    static final String PROVIDER_NAME = "ch.ffhs.fs17.esa.studentcontentprovider";
-    static final String URL = "content://" + PROVIDER_NAME + "/students";
+public class StudentsProvider extends ContentProvider{
+    // TODO: Fill details.
+    static final String PROVIDER_NAME = "...";
+    static final String URL = "content://" + PROVIDER_NAME + "/...";
     static final Uri CONTENT_URI = Uri.parse(URL);
 
-    static final String _ID = "_id";
-    static final String NAME = "name";
-    static final String GRADE = "grade";
+    static final String _ID = "...";
+    static final String NAME = "...";
+    static final String GRADE = "...";
 
     private static HashMap<String, String> STUDENTS_PROJECTION_MAP;
 
@@ -32,25 +33,21 @@ public class StudentsProvider extends ContentProvider {
     static final int STUDENT_ID = 2;
 
     static final UriMatcher uriMatcher;
-    static{
+    static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(PROVIDER_NAME, "students", STUDENTS);
         uriMatcher.addURI(PROVIDER_NAME, "students/#", STUDENT_ID);
     }
 
-    /**
+    /** TODO:
      * Database specific constant declarations
      */
 
-    private SQLiteDatabase db;
-    static final String DATABASE_NAME = "College";
+    private SQLiteDatabase mDatabase;
+    static final String DATABASE_NAME = "...";
     static final String STUDENTS_TABLE_NAME = "students";
-    static final int DATABASE_VERSION = 2;
-    static final String CREATE_DB_TABLE =
-            " CREATE TABLE " + STUDENTS_TABLE_NAME +
-                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    " name TEXT NOT NULL, " +
-                    " grade TEXT NOT NULL);";
+    static final int DATABASE_VERSION = 1;
+    static final String CREATE_DB_TABLE = "...";
 
     /**
      * Helper class that actually creates and manages
@@ -58,82 +55,48 @@ public class StudentsProvider extends ContentProvider {
      */
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
+
         DatabaseHelper(Context context){
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(CREATE_DB_TABLE);
+            // TODO: Create DB
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " +  STUDENTS_TABLE_NAME);
-            onCreate(db);
+            // TODO: Drop and call create.
         }
     }
 
     @Override
     public boolean onCreate() {
-        Context context = getContext();
-        DatabaseHelper dbHelper = new DatabaseHelper(context);
-
-        /**
-         * Create a write able database which will trigger its
+        /** TODO:
+         * Create a writeable database which will trigger its
          * creation if it doesn't already exist.
          */
-
-        db = dbHelper.getWritableDatabase();
-        return (db == null)? false:true;
+        return false;
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        /**
+        /** TODO:
          * Add a new student record
          */
-        long rowID = db.insert(	STUDENTS_TABLE_NAME, "", values);
-
-        /**
-         * If record is added successfully
+        /** TODO:
+         * If record is added successfully, return the uri.
          */
-        if (rowID > 0) {
-            Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-            getContext().getContentResolver().notifyChange(_uri, null);
-            return _uri;
-        }
 
         throw new SQLException("Failed to add a record into " + uri);
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection,
-                        String selection,String[] selectionArgs, String sortOrder) {
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(STUDENTS_TABLE_NAME);
+    public Cursor query(Uri uri, String[] projection, String selection,String[] selectionArgs, String sortOrder) {
+        // TODO: Create a cursor c (Page 309)
+        Cursor c = null;
 
-        switch (uriMatcher.match(uri)) {
-            case STUDENTS:
-                qb.setProjectionMap(STUDENTS_PROJECTION_MAP);
-                break;
-
-            case STUDENT_ID:
-                qb.appendWhere( _ID + "=" + uri.getPathSegments().get(1));
-                break;
-
-            default:
-        }
-
-        if (sortOrder == null || sortOrder == ""){
-            /**
-             * By default sort on student names
-             */
-            sortOrder = NAME;
-        }
-
-        Cursor c = qb.query(db,	projection,	selection,
-                selectionArgs,null, null, sortOrder);
         /**
          * register to watch a content URI for changes
          */
@@ -146,19 +109,16 @@ public class StudentsProvider extends ContentProvider {
         int count = 0;
         switch (uriMatcher.match(uri)){
             case STUDENTS:
-                count = db.delete(STUDENTS_TABLE_NAME, selection, selectionArgs);
+                // TODO: delete table and return count.
                 break;
 
             case STUDENT_ID:
-                String id = uri.getPathSegments().get(1);
-                count = db.delete( STUDENTS_TABLE_NAME, _ID +  " = " + id +
-                                (!TextUtils.isEmpty(selection) ? "  AND (" + selection + ')' : ""), selectionArgs);
+                // TODO: delete specific id and return count.
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
-
-        getContext().getContentResolver().notifyChange(uri, null);
+        // TODO: notify change on the uri.
         return count;
     }
 
@@ -168,19 +128,17 @@ public class StudentsProvider extends ContentProvider {
         int count = 0;
         switch (uriMatcher.match(uri)) {
             case STUDENTS:
-                count = db.update(STUDENTS_TABLE_NAME, values, selection, selectionArgs);
+                // TODO: update table and return count.
                 break;
 
             case STUDENT_ID:
-                count = db.update(STUDENTS_TABLE_NAME, values,
-                        _ID + " = " + uri.getPathSegments().get(1) +
-                                (!TextUtils.isEmpty(selection) ? "  AND (" +selection + ')' : ""), selectionArgs);
+                // TODO: update specific row and return count.
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri );
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        // TODO: notify change on the uri.
         return count;
     }
 
@@ -191,12 +149,12 @@ public class StudentsProvider extends ContentProvider {
              * Get all student records
              */
             case STUDENTS:
-                return "vnd.android.cursor.dir/vnd.example.students";
+                return "bla";
             /**
              * Get a particular student
              */
             case STUDENT_ID:
-                return "vnd.android.cursor.item/vnd.example.students";
+                return "bla";
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }

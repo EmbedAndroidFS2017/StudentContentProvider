@@ -23,36 +23,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
     }
     public void onClickAddName(View view) {
-        // Add a new student record
-        ContentValues values = new ContentValues();
-        values.put(StudentsProvider.NAME,
-                ((EditText)findViewById(R.id.editTextName)).getText().toString());
-
-        values.put(StudentsProvider.GRADE,
-                ((EditText)findViewById(R.id.editText3)).getText().toString());
-
-        Uri uri = getContentResolver().insert(
-                StudentsProvider.CONTENT_URI, values);
-
-        Toast.makeText(getBaseContext(),
-                uri.toString(), Toast.LENGTH_LONG).show();
+        // TODO: Add a new student record - insert values to the uri.
+        // TODO: show the uri in a Toast.
     }
 
     public void onClickRetrieveStudents(View view) {
-        // Retrieve student records
-        String URL = "content://ch.ffhs.fs17.esa.studentcontentprovider";
-
-        Uri students = Uri.parse(URL);
-        Cursor c = getContentResolver().query(students, null, null, null, StudentsProvider.NAME);
-
-        if (c.moveToFirst()) {
-            do{
-                Toast.makeText(this,
-                        c.getString(c.getColumnIndex(StudentsProvider._ID)) +
-                                ", " +  c.getString(c.getColumnIndex( StudentsProvider.NAME)) +
-                                ", " + c.getString(c.getColumnIndex( StudentsProvider.GRADE)),
-                        Toast.LENGTH_SHORT).show();
-            } while (c.moveToNext());
-        }
+        // TODO: Retrieve student records from the uri using ContentResolver.
+        // TODO: using a Cursor show individual records in a Toast.
     }
 }

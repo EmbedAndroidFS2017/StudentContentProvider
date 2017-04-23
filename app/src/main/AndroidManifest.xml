@@ -15,7 +15,6 @@
             </intent-filter>
         </activity>
 
-        <provider android:name="StudentsProvider"
-            android:authorities="ch.ffhs.fs17.esa.studentcontentprovider"/>
+        <!-- TODO: complete the provider -->
     </application>
 </manifest>
